@@ -9,4 +9,4 @@ spec:
     storage: 100Mi
   hostPath:
     path: /mnt/data
-  storageClassName: ibmc-vpc-block-10iops-tier
+  storageClassName: nfs-client

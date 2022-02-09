@@ -13,7 +13,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: terminology-mappings-pv-claim
 spec:
-  storageClassName: ibmc-vpc-block-10iops-tier
+  storageClassName: nfs-client
   accessModes:
     - ReadWriteMany
   resources:
@@ -25,7 +25,7 @@ kind: PersistentVolume
 metadata:
   name: terminology-mappings-pv
 spec:
-  storageClassName: ibmc-vpc-block-10iops-tier
+  storageClassName: nfs-client
   capacity:
     storage: 10Gi
   accessModes:

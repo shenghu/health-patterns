@@ -45,8 +45,9 @@ fhirNotificationsEnabled: &fhirNotificationsEnabled false
 
 ingress:
   enabled: &ingressEnabled true
-  class: &ingressClass public-iks-k8s-nginx
-  hostname: &hostname replace-me
+  class: &ingressClass openshift-default
+  hostname: &hostname alvearie.apps.fhir-demo.cp.fyre.ibm.com
+  hostnameNifi: &hostnameNifi alvearie-nifi.apps.fhir-demo.cp.fyre.ibm.com
 
 ingestion:
   enabled: &ingestionEnabled "true"
@@ -323,11 +324,11 @@ nifi2: # NifiKop based Nifi
       secret: *oidc_client_secret
   ingress:
     class: *ingressClass
-    hostname: *hostname
+    hostname: *hostnameNifi
   service:
     protocol: https
     port: 8443
-  storageClassName: ibmc-vpc-block-metro-10iops-tier
+  storageClassName: nfs-client
   dataflow:
     - name: health-patterns-dataflow
       enabled: *ingestionEnabled
@@ -359,7 +360,7 @@ nifi:
   ingress:
     enabled: false
     class: *ingressClass
-    hostname: *hostname
+    hostname: *hostnameNifi
   persistence:
     enabled: true
   service:
@@ -425,7 +426,7 @@ nifi:
     safetyValve:
       #Enable to allow Nifi connection w/o requiring login
       nifi.security.allow.anonymous.authentication: false
-      nifi.web.proxy.host: *hostname
+      nifi.web.proxy.host: *hostnameNifi
   logresources:
     requests:
       memory: 30Mi
