@@ -22,24 +22,18 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-max-age: '43200'
     nginx.ingress.kubernetes.io/session-cookie-name: nifi_session_affinity
     nginx.ingress.kubernetes.io/session-cookie-path: /
+    route.openshift.io/termination: "passthrough"
 spec:
   rules:
     - host: {{ .Values.nifi2.ingress.hostname }}
       http:
         paths:
-          - path: /nifi
+          - path: ''
             pathType: ImplementationSpecific
             backend:
               service:
                 name: nifi-headless
                 port: 
-                  number: {{ $ingressPort }}
-          - path: /nifi-api
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: nifi-headless
-                port:
                   number: {{ $ingressPort }}
 {{- end }}
 {{- end }}

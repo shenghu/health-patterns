@@ -49,6 +49,7 @@ ingress:
   hostname: &hostname alvearie.apps.fhir-demo.cp.fyre.ibm.com
   hostnameNifi: &hostnameNifi alvearie-nifi.apps.fhir-demo.cp.fyre.ibm.com
   hostnameFhir: &hostnameFhir alvearie-fhir.apps.fhir-demo.cp.fyre.ibm.com
+  hostnameKeyCloak: &hostnameKeyCloak alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com
 
 ingestion:
   enabled: &ingestionEnabled "true"
@@ -180,6 +181,27 @@ fhir:
 
   datasourcesTemplate: defaultDerbyDatasources
 
+  keycloak:
+    enabled: true
+    ingress:
+      enabled: *ingressEnabled
+      class: *ingressClass
+      hostname: *hostnameKeyCloak
+      annotations: {
+        nginx.ingress.kubernetes.io/server-snippet: add_header Strict-Transport-Security "max-age=86400; includeSubDomains";,
+        nginx.ingress.kubernetes.io/backend-protocol: HTTPS,
+        nginx.ingress.kubernetes.io/proxy-ssl-protocols: TLSv1.2 TLSv1.3,
+        nginx.ingress.kubernetes.io/proxy-ssl-verify: "true",
+        nginx.ingress.kubernetes.io/use-regex: 'true',
+        route.openshift.io/termination: "passthrough"
+      }
+
+      rules:
+        - host: *hostnameKeyCloak
+          paths:
+            - path: ''
+              pathType: ImplementationSpecific
+ 
   objectStorage:
     enabled: false
     location:
@@ -277,7 +299,7 @@ fhir-deid-trigger:
 # Nifi Registry
 # ------------------------------------------------------------------------------
 nifi-registry:
-  enabled: true
+  enabled: false
   # The fullname is overridden to some static name in order to automatically register the NiFi Registry with the NiFi deployment
   fullnameOverride: alvearie-nifi-registry
   ingress:
@@ -354,7 +376,7 @@ nifi:
   image:
     tag: 1.15.2
   fullnameOverride: alvearie-nifi
-  enabled: *nifikopDisabled
+  enabled: false
   auth:
     singleUser:
       username: &nifiUser alvearie
@@ -504,7 +526,7 @@ deid-prep:
 # Terminology Services Prep Service
 # ------------------------------------------------------------------------------
 term-services-prep:
-  enabled: true
+  enabled: false
   ingress:
     enabled: false
     class: *ingressClass

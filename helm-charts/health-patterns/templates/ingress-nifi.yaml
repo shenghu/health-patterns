@@ -21,24 +21,18 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-path: "/"
     nginx.ingress.kubernetes.io/session-cookie-expires: "43200"
     nginx.ingress.kubernetes.io/session-cookie-max-age: "43200"
+    route.openshift.io/termination: "passthrough"
 spec:
   rules:
     - host: {{ .Values.nifi.ingress.hostname }}
       http:
         paths:
-        - path: /nifi
+        - path: ''
           pathType: ImplementationSpecific
           backend:
             service:
               name: alvearie-nifi
               port: 
-                number: {{ $ingressPort }}
-        - path: /nifi-api
-          pathType: ImplementationSpecific
-          backend:
-            service:
-              name: alvearie-nifi
-              port:
                 number: {{ $ingressPort }}
 {{- end }}
 {{- end }}
