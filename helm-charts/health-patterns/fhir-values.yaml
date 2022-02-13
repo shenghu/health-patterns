@@ -46,10 +46,10 @@ fhirNotificationsEnabled: &fhirNotificationsEnabled false
 ingress:
   enabled: &ingressEnabled true
   class: &ingressClass openshift-default
-  hostname: &hostname alvearie.apps.fhir-demo.cp.fyre.ibm.com
-  hostnameNifi: &hostnameNifi alvearie-nifi.apps.fhir-demo.cp.fyre.ibm.com
-  hostnameFhir: &hostnameFhir alvearie-fhir.apps.fhir-demo.cp.fyre.ibm.com
-  hostnameKeyCloak: &hostnameKeyCloak alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com
+  hostname: &hostname alvearie.apps.fhirdemo.cp.fyre.ibm.com
+  hostnameNifi: &hostnameNifi alvearie-nifi.apps.fhirdemo.cp.fyre.ibm.com
+  hostnameFhir: &hostnameFhir alvearie-fhir.apps.fhirdemo.cp.fyre.ibm.com
+  hostnameKeyCloak: &hostnameKeyCloak alvearie-keycloak.apps.fhirdemo.cp.fyre.ibm.com
 
 ingestion:
   enabled: &ingestionEnabled "true"
@@ -169,6 +169,12 @@ fhir:
 
   postgresql:
     enabled: true
+    image:
+      tag: 14.1.0
+    livenessProbe:
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      failureThreshold: 60
 
   schemaMigration:
     enabled: false
@@ -201,6 +207,14 @@ fhir:
           paths:
             - path: ''
               pathType: ImplementationSpecific
+  
+    postgresql:
+      image:
+        tag: 14.1.0
+      livenessProbe:
+        initialDelaySeconds: 60
+        periodSeconds: 30
+        failureThreshold: 60   
  
   objectStorage:
     enabled: false
