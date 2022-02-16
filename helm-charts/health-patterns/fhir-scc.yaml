@@ -4,18 +4,20 @@ metadata:
   name: fhir-scc
 allowPrivilegedContainer: false
 runAsUser:
-  type: MustRunAsRange
-  uidRangeMin: 1000
-  uidRangeMax: 2000
+  type: RunAsAny
 seLinuxContext:
   type: RunAsAny
 fsGroup:
-  type: MustRunAs
-  ranges:
-  - min: 1000
-    max: 2000
+  type: RunAsAny
 supplementalGroups:
   type: MustRunAs
   ranges:
   - min: 1000
     max: 2000
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- projected
+- secret

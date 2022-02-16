@@ -207,8 +207,9 @@ fhir:
           paths:
             - path: ''
               pathType: ImplementationSpecific
-  
+      servicePort: https
     postgresql:
+      nameOverride: keycloak-postgres  
       image:
         tag: 14.1.0
       livenessProbe:
