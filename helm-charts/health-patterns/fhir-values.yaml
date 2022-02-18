@@ -46,10 +46,10 @@ fhirNotificationsEnabled: &fhirNotificationsEnabled false
 ingress:
   enabled: &ingressEnabled true
   class: &ingressClass openshift-default
-  hostname: &hostname alvearie.apps.fhirdemo.cp.fyre.ibm.com
-  hostnameNifi: &hostnameNifi alvearie-nifi.apps.fhirdemo.cp.fyre.ibm.com
-  hostnameFhir: &hostnameFhir alvearie-fhir.apps.fhirdemo.cp.fyre.ibm.com
-  hostnameKeyCloak: &hostnameKeyCloak alvearie-keycloak.apps.fhirdemo.cp.fyre.ibm.com
+  hostname: &hostname alvearie.apps.fhir-demo.cp.fyre.ibm.com
+  hostnameNifi: &hostnameNifi alvearie-nifi.apps.fhir-demo.cp.fyre.ibm.com
+  hostnameFhir: &hostnameFhir alvearie-fhir.apps.fhir-demo.cp.fyre.ibm.com
+  hostnameKeyCloak: &hostnameKeyCloak alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com
 
 ingestion:
   enabled: &ingestionEnabled "true"
@@ -156,6 +156,20 @@ fhir:
         paths:
           - path: ''
             pathType: ImplementationSpecific
+
+  security:
+    jwtValidation:
+      enabled: true
+      audience: https://alvearie-fhir.apps.fhir-demo.cp.fyre.ibm.com/fhir-server/api/v4
+      issuer: https://alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com/auth/realms/test
+    oauth:
+      enabled: true
+      regUrl: https://alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com/auth/realms/test/clients-registrations/openid-connect
+      authUrl: https://alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com/auth/realms/test/protocol/openid-connect/auth
+      tokenUrl: https://alvearie-keycloak.apps.fhir-demo.cp.fyre.ibm.com/auth/realms/test/protocol/openid-connect/token
+      smart:
+        enabled: true
+
   proxy:
     name: fhir-proxy
     enabled: false
@@ -367,7 +381,7 @@ nifi2: # NifiKop based Nifi
   service:
     protocol: https
     port: 8443
-  storageClassName: nfs-client
+  storageClassName: ocs-storagecluster-cephfs
   dataflow:
     - name: health-patterns-dataflow
       enabled: *ingestionEnabled

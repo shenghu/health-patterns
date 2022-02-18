@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: use-fhir-scc-keycloak
+subjects:
+  - kind: ServiceAccount
+    name: ibm-fhir-server-keyc
+roleRef:
+  kind: Role
+  name: use-fhir-scc
+  apiGroup: rbac.authorization.k8s.io
