@@ -194,12 +194,12 @@ fhir:
     enabled: false
 
   db:
-    type: derby
-    schema: app
+    type: postgresql 
+    schema: fhirdata
 
   replicaCount: 1
 
-  datasourcesTemplate: defaultDerbyDatasources
+  datasourcesTemplate: defaultPostgresDatasources
 
   keycloak:
     enabled: true
