@@ -43,7 +43,7 @@ dependencies:
     repository: https://alvearie.io/alvearie-helm
   - name: term-services-prep
     version: 0.1.0
-    condition: fhir.enabled
+    condition: fhir.termService.enabled
     repository: https://alvearie.github.io/health-patterns/charts
   - name: fhir-trigger
     version: 0.1.1
