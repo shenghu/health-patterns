@@ -134,8 +134,8 @@ fhir:
     port: 80
   image: 
     tag: "4.10.2"
-  keyStoreSecret: 
-  trustStoreSecret: 
+  keyStoreSecret: fhir-keystore-secret
+  trustStoreSecret: fhir-truststore-secret
   containerSecurityContext: 
     runAsUser: 1000610000
   env:
@@ -257,6 +257,11 @@ fhir:
               pathType: ImplementationSpecific
       servicePort: https
 
+    podSecurityContext:
+      fsGroup: 1000610000 
+    securityContext:
+      runAsUser: 1000610000 
+
     postgresql:
       enabled: false
       postgresqlUsername: keycloak
@@ -298,17 +303,17 @@ fhir:
         secret:
           secretName: {{ template "keycloak.fullname" $ }}-admin-secret    
     
-    serviceAccount:
-      create: false
-      name: alvearie-sa-privileged
+    #serviceAccount:
+    #  create: false
+    #  name: alvearie-sa-privileged
 
   objectStorage:
-    enabled: false
-    location:
-    endpointUrl:
-    accessKey:
+    enabled: true 
+    location: ocs-storagecluster-cephobjectstore
+    endpointUrl: https://rgw-openshift-storage.apps.fhir-demo.cp.fyre.ibm.com/
+    accessKey: 
     secretKey:
-    bulkDataBucketName:
+    bulkDataBucketName: fhir-data-b18c1558-a687-42cf-89e8-8272a34f0dbe
 
   exposeHttpEndpoint: true
   exposeHttpPort: 80
