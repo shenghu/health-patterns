@@ -125,11 +125,17 @@ nlp-insights:
 fhir:
   name: fhir
   enabled: true
+  termService:
+    enabled: false
   service:
     type: ClusterIP
     port: 80
+  image: 
+    tag: "4.10.2"
   keyStoreSecret: fhir-keystore-secret
   trustStoreSecret: fhir-truststore-secret
+  containerSecurityContext: 
+    runAsUser: 1000610000  
   env:
     # Per the FHIR team this is recommended to avoid some time out issues seen when deploying recently.
     - name: FHIR_TRANSACTION_MANAGER_TIMEOUT
@@ -182,6 +188,7 @@ fhir:
   fhirAdminPassword: *alveariePassword
 
   postgresql:
+    # TODO define user/password to avoid regenerating during upgrade
     enabled: true
     image:
       tag: 14.1.0
@@ -189,6 +196,8 @@ fhir:
       initialDelaySeconds: 60
       periodSeconds: 30
       failureThreshold: 60
+    persistence:
+      storageClass: "ocs-storagecluster-cephfs"      
 
   schemaMigration:
     enabled: false
@@ -222,7 +231,14 @@ fhir:
             - path: ''
               pathType: ImplementationSpecific
       servicePort: https
+
+    podSecurityContext:
+      fsGroup: 1000610000 
+    securityContext:
+      runAsUser: 1000610000 
+
     postgresql:
+      # TODO define user/password to avoid being re-generated everytime
       nameOverride: keycloak-postgres  
       image:
         tag: 14.1.0
@@ -354,7 +370,7 @@ cert-secret-generator:
 # Zookeeper Configuration
 # ------------------------------------------------------------------------------
 zookeeper:
-  enabled: true
+  enabled: false
   # The zookeeper fullname is overridden so that the same instance deployed here by default can be referred to by both NiFi and Kafka
   fullnameOverride: alvearie-zookeeper
 
@@ -488,7 +504,7 @@ nifi:
 # Kafka Configuration
 # ------------------------------------------------------------------------------
 kafka:
-  enabled: true
+  enabled: false
   maxMessageBytes: _10000000
   externalAccess:
     enabled: true
@@ -565,7 +581,7 @@ term-services-prep:
 # Expose Kafka Service
 # ------------------------------------------------------------------------------
 expose-kafka:
-  enabled: true
+  enabled: false
   ingress:
     enabled: *ingressEnabled
     class: *ingressClass

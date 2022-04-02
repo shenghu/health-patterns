@@ -24,8 +24,6 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-serviceAccount:
-  name: "alvearie-sa-privileged"
 nodeSelector: {}
 
 tolerations: []
@@ -302,10 +300,6 @@ fhir:
       - name: keycloak-admin
         secret:
           secretName: {{ template "keycloak.fullname" $ }}-admin-secret    
-    
-    #serviceAccount:
-    #  create: false
-    #  name: alvearie-sa-privileged
 
   objectStorage:
     enabled: true 
@@ -430,7 +424,7 @@ cert-secret-generator:
 # Zookeeper Configuration
 # ------------------------------------------------------------------------------
 zookeeper:
-  enabled: true
+  enabled: false
   # The zookeeper fullname is overridden so that the same instance deployed here by default can be referred to by both NiFi and Kafka
   fullnameOverride: alvearie-zookeeper
 
@@ -564,7 +558,7 @@ nifi:
 # Kafka Configuration
 # ------------------------------------------------------------------------------
 kafka:
-  enabled: true
+  enabled: false
   maxMessageBytes: _10000000
   externalAccess:
     enabled: true
@@ -641,7 +635,7 @@ term-services-prep:
 # Expose Kafka Service
 # ------------------------------------------------------------------------------
 expose-kafka:
-  enabled: true
+  enabled: false
   ingress:
     enabled: *ingressEnabled
     class: *ingressClass
